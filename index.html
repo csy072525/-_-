@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>반짝반짝 우리학교 도서관</title>
+    <!-- 구글 폰트 'Jua' 적용 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-book-open-reader"></i> 반짝반짝 우리학교 도서관
+        </div>
+        <nav>
+            <ul>
+                <li><button onclick="navigate('home')" class="nav-btn active" id="nav-home">홈</button></li>
+                <li><button onclick="navigate('story')" class="nav-btn" id="nav-story">이야기</button></li>
+                <li><button onclick="navigate('chatbot')" class="nav-btn" id="nav-chatbot">도서관 챗봇</button></li>
+                <li><button onclick="navigate('game')" class="nav-btn" id="nav-game">KDC 게임</button></li>
+                <li><button onclick="navigate('ox-game')" class="nav-btn" id="nav-ox-game">O/X 퀴즈</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- 홈 화면 -->
+        <section id="home" class="page-section active">
+            <div class="hero">
+                <h1>환영합니다! 재미있는 도서관에 오신 것을 환영해요!</h1>
+                <p>위의 메뉴를 눌러서 재미있는 이야기와 게임을 즐겨보세요!</p>
+                <div class="hero-icons">
+                    <i class="fa-solid fa-book" style="color: #FF9AA2;"></i>
+                    <i class="fa-solid fa-gamepad" style="color: #C7CEEA;"></i>
+                    <i class="fa-solid fa-robot" style="color: #B5EAD7;"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- 이야기 화면 -->
+        <section id="story" class="page-section">
+            <h2><i class="fa-solid fa-star"></i> 재미있는 이야기 나라 <i class="fa-solid fa-star"></i></h2>
+            
+            <div class="story-list" id="story-list">
+                <!-- 콩쥐팥쥐 -->
+                <div class="story-card" onclick="openStory('kongji')">
+                    <div class="story-cover" style="background-color: #FFB7B2;">
+                        <i class="fa-solid fa-shoe-prints fa-4x" style="color: #fff;"></i>
+                    </div>
+                    <h3>콩쥐팥쥐</h3>
+                    <p>착한 콩쥐의 이야기</p>
+                </div>
+                
+                <!-- 어린왕자 -->
+                <div class="story-card" onclick="openStory('prince')">
+                    <div class="story-cover" style="background-color: #FFDAC1;">
+                        <i class="fa-solid fa-moon fa-4x" style="color: #fff;"></i>
+                    </div>
+                    <h3>어린왕자</h3>
+                    <p>별에서 온 친구 이야기</p>
+                </div>
+            </div>
+
+            <!-- 이야기 읽기 영역 -->
+            <div id="story-reader" class="hidden">
+                <button class="back-btn" onclick="closeStory()"><i class="fa-solid fa-arrow-left"></i> 뒤로가기</button>
+                <h2 id="story-title"></h2>
+                <div id="story-content" class="story-text"></div>
+            </div>
+        </section>
+
+        <!-- 챗봇 화면 -->
+        <section id="chatbot" class="page-section">
+            <h2><i class="fa-solid fa-robot"></i> 도서관 친구 챗봇 <i class="fa-solid fa-robot"></i></h2>
+            <div class="chat-container">
+                <div class="chat-box" id="chat-box">
+                    <div class="message bot-message">
+                        안녕! 나는 도서관 친구 챗봇이야. 책이나 도서관에 대해 궁금한 게 있으면 물어봐줘!
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="chat-input" placeholder="여기에 질문을 적어주세요!" onkeypress="handleChatKeyPress(event)">
+                    <button onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i> 보내기</button>
+                </div>
+                <div class="chat-hints">
+                    추천 질문: <span onclick="fillChat('도서관은 언제 문을 열어?')">도서관 시간</span>, <span onclick="fillChat('재미있는 책 추천해줘!')">책 추천</span>, <span onclick="fillChat('인사해줘!')">인사</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 게임 화면 -->
+        <section id="game" class="page-section">
+            <h2><i class="fa-solid fa-puzzle-piece"></i> KDC 도서 기호 맞추기 게임 <i class="fa-solid fa-puzzle-piece"></i></h2>
+            <p>책들은 각자 번호가 있어요! 어떤 내용의 책인지 번호를 맞춰볼까요?</p>
+            
+            <div class="game-container">
+                <div class="game-question" id="game-question">
+                    문제 준비 중...
+                </div>
+                <div class="game-options" id="game-options">
+                    <!-- 버튼들이 동적으로 추가됨 -->
+                </div>
+                <div class="game-feedback hidden" id="game-feedback">
+                    <!-- 정답/오답 피드백 -->
+                </div>
+                <div class="game-score">
+                    점수: <span id="score">0</span>점
+                </div>
+                <button class="game-start-btn" onclick="startGame()"><i class="fa-solid fa-play"></i> 게임 시작하기!</button>
+            </div>
+        </section>
+
+        <!-- O/X 퀴즈 화면 -->
+        <section id="ox-game" class="page-section">
+            <h2><i class="fa-solid fa-check-double"></i> 도서관 예절 O/X 퀴즈 <i class="fa-solid fa-check-double"></i></h2>
+            <p>도서관에서는 어떻게 행동해야 할까요? 올바른 행동인지 O/X로 맞춰보세요!</p>
+            
+            <div class="game-container">
+                <div class="game-question" id="ox-question">
+                    문제 준비 중...
+                </div>
+                <div class="game-options" id="ox-options">
+                    <!-- 버튼들이 동적으로 추가됨 -->
+                </div>
+                <div class="game-feedback hidden" id="ox-feedback">
+                    <!-- 정답/오답 피드백 -->
+                </div>
+                <div class="game-score">
+                    점수: <span id="ox-score">0</span>점
+                </div>
+                <button class="game-start-btn" onclick="startOxGame()"><i class="fa-solid fa-play"></i> 퀴즈 시작하기!</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
